@@ -9,6 +9,7 @@ import GBP from './img/GBP.png'
 import JPY from './img/JPY.png'
 import RUB from './img/RUB.png'
 import USD from './img/USD.png'
+import {RateContext} from "./context/RateContext";
 
 class App extends React.Component
 {
@@ -59,10 +60,11 @@ class App extends React.Component
         }
     }
 
-
     render(){
         return(
-          <Layout />
+            <RateContext.Provider value={{state: this.state}}>
+                <Layout />
+            </RateContext.Provider>
         )
     }
 }

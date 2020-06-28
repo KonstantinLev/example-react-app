@@ -1,7 +1,11 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import './sidebar.scss'
+import {RateContext} from "../../context/RateContext";
 
 export const Sidebar = () => {
+
+    const {state} = useContext(RateContext)
+
     return(
         <div className='sidebar'>
             <div className='sidebarHead'>
@@ -9,7 +13,20 @@ export const Sidebar = () => {
             </div>
             <div className='sidebarContent'>
                 <ul>
-                    <li></li>
+                    {
+                        Object.keys(state.currency).map((item, idx) => {
+                            return(
+                                <li key={item}>
+                                    <p>
+                                        <span>
+                                            <img src={state.currency[item].flag} alt={item}/> {item}
+                                            <i> {state.currency[item].name}</i>
+                                        </span>
+                                    </p>
+                                </li>
+                            )
+                        })
+                    }
                 </ul>
             </div>
         </div>
