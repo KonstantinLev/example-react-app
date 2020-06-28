@@ -24,40 +24,62 @@ class App extends React.Component
                 USD: {
                     name: 'Доллар США',
                     flag: USD,
-                    course: '3213'
+                    course: ''
                 },
                 RUB: {
                     name: 'Рубль',
                     flag: RUB,
-                    course: '31213'
+                    course: ''
                 },
                 JPY: {
                     name: 'Японская Юань',
                     flag: JPY,
-                    course: '321'
+                    course: ''
                 },
                 GBP: {
                     name: 'Фунт Стерлингов',
                     flag: GBP,
-                    course: '00067'
+                    course: ''
                 },
                 EUR: {
                     name: 'Евро',
                     flag: EUR,
-                    course: '1234'
+                    course: ''
                 },
                 CNY: {
                     name: 'Китайский Юань',
                     flag: CNY,
-                    course: '123'
+                    course: ''
                 },
                 CHF: {
                     name: 'Швейцарский Франк',
                     flag: CHF,
-                    course: '321312'
+                    course: ''
                 },
             }
         }
+    }
+
+
+    componentDidMount() {
+        fetch(`https://api.exchangeratesapi.io/latest?base=${this.state.base}`)
+            .then((response) => response.json())
+            .then((response) => {
+
+                const rateArr = ['USD', 'RUB', 'JPY', 'GBP', 'EUR', 'CNY', 'CHF']
+                //const currency = {...this.state.currency}
+                const currency = this.state.currency
+
+                for (let i=0; i < rateArr.length; i++) {
+                    currency[rateArr[i]].course = response.rates[rateArr[i]]
+                }
+
+                this.setState({
+                    rate: response.rates,
+                    date: response.date,
+                    currency
+                })
+            })
     }
 
     render(){
