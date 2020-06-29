@@ -56,8 +56,37 @@ class App extends React.Component
                     flag: CHF,
                     course: ''
                 },
-            }
+            },
+            //calculator
+            inputValue: 100,
+            currencyValue: 'USD',
+            result: null
         }
+    }
+
+    inputValueHandler = (event) => {
+        this.setState({
+            inputValue: event.target.value
+        })
+    }
+
+    currencyValueHandler = (event) => {
+        this.setState({
+            currencyValue: event.target.value
+        })
+    }
+
+    calculatorValueHandler = async (value) => {
+        let result
+        //async
+        await fetch(`https://api.exchangeratesapi.io/latest?base=RUB`)
+            .then((response) => response.json())
+            .then((response) => {
+                result = response.rates[value] * this.state.inputValue
+            })
+
+        this.setState({result})
+
     }
 
 
@@ -84,7 +113,13 @@ class App extends React.Component
 
     render(){
         return(
-            <RateContext.Provider value={{state: this.state}}>
+            <RateContext.Provider
+                value={{
+                    state: this.state,
+                    inputValueHandler: this.inputValueHandler,
+                    currencyValueHandler: this.currencyValueHandler,
+                    calculatorValueHandler: this.calculatorValueHandler
+                }}>
                 <Layout />
             </RateContext.Provider>
         )
