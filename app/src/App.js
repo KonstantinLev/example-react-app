@@ -66,13 +66,15 @@ class App extends React.Component
 
     inputValueHandler = (event) => {
         this.setState({
-            inputValue: event.target.value
+            inputValue: event.target.value,
+            result: null
         })
     }
 
     currencyValueHandler = (event) => {
         this.setState({
-            currencyValue: event.target.value
+            currencyValue: event.target.value,
+            result: null
         })
     }
 

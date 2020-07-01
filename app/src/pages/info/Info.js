@@ -3,6 +3,10 @@ import './info.scss'
 
 export const Info = () => {
     return(
-        <h1>Info page</h1>
+        <div className='info'>
+            <h3>Currency conversion application</h3>
+            <p>Author: test</p>
+            <p>Email: test@test.ru</p>
+        </div>
     )
 }
