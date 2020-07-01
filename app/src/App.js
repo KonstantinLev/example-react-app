@@ -1,6 +1,7 @@
 import React from 'react'
 import './App.scss'
 import Layout from "./components/layout/Layout";
+import axios from 'axios'
 
 import CHF from './img/CHF.png'
 import CNY from './img/CNY.png'
@@ -57,10 +58,22 @@ class App extends React.Component
                     course: ''
                 },
             },
+
             //calculator
+
             inputValue: 100,
             currencyValue: 'USD',
-            result: null
+            result: null,
+
+            //sample
+
+            sample: {
+                base: 'RUB',
+                base2: 'USD',
+                date: ''
+            },
+            sampleList: ''
+
         }
     }
 
@@ -113,6 +126,36 @@ class App extends React.Component
             })
     }
 
+    baseHandler = (event) => {
+        this.setState({
+            sample: {...this.state.sample, base: event.target.value}
+        })
+    }
+
+    base2Handler = (event) => {
+        this.setState({
+            sample: {...this.state.sample, base2: event.target.value}
+        })
+    }
+
+    sampleDateHandler = (event) => {
+        this.setState({
+            sample: {...this.state.sample, date: event.target.value}
+        })
+    }
+
+    dataWrite = async (sample) => {
+        await axios.post('https://example-react-app.firebaseio.com/sample.json', sample)
+            .then((response) => {
+                return('')
+            })
+
+        await axios.get('https://example-react-app.firebaseio.com/sample.json')
+            .then((response) => {
+                this.setState({sampleList: response.data})
+            })
+    }
+
     render(){
         return(
             <RateContext.Provider
@@ -120,7 +163,11 @@ class App extends React.Component
                     state: this.state,
                     inputValueHandler: this.inputValueHandler,
                     currencyValueHandler: this.currencyValueHandler,
-                    calculatorValueHandler: this.calculatorValueHandler
+                    calculatorValueHandler: this.calculatorValueHandler,
+                    baseHandler: this.baseHandler,
+                    base2Handler: this.base2Handler,
+                    sampleDateHandler: this.sampleDateHandler,
+                    dataWrite: this.dataWrite
                 }}>
                 <Layout />
             </RateContext.Provider>
