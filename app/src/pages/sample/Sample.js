@@ -40,7 +40,22 @@ export const Sample = () => {
                     <Button click={dataWrite} arg={state.sample} text='Получить курс' />
                 </div>
                 <div className='sampleResult'>
-                    <ul></ul>
+                    <ul>
+                        {
+                            Object.keys(state.sampleList).map((item, idx) => {
+                                return(
+                                    <li key={item}>
+                                        <span>
+                                            <img src={state.currency[state.sampleList[item].base].flag} alt={item} />&nbsp; {state.sampleList[item].base}
+                                        </span>
+                                        <span>{state.sampleList[item].date}</span>
+                                        <span>{`${state.sampleList[item].course} ${state.sampleList[item].base2}`}</span>
+                                        <button><i className='fa fa-times'></i></button>
+                                    </li>
+                                )
+                            })
+                        }
+                    </ul>
                 </div>
             </div>
         </div>

@@ -68,9 +68,10 @@ class App extends React.Component
             //sample
 
             sample: {
-                base: 'RUB',
-                base2: 'USD',
-                date: ''
+                base: 'USD',
+                base2: 'RUB',
+                date: '',
+                course: ''
             },
             sampleList: ''
 
@@ -144,8 +145,16 @@ class App extends React.Component
         })
     }
 
-    dataWrite = async (sample) => {
-        await axios.post('https://example-react-app.firebaseio.com/sample.json', sample)
+    dataWrite = async () => {
+        await fetch(`https://api.exchangeratesapi.io/${this.state.sample.date}?base=${this.state.sample.base}`)
+            .then((response) => response.json())
+            .then((response) => {
+                this.setState({
+                    sample: {...this.state.sample, course: response.rates[this.state.sample.base2]}
+                })
+            })
+
+        await axios.post('https://example-react-app.firebaseio.com/sample.json', this.state.sample)
             .then((response) => {
                 return('')
             })
