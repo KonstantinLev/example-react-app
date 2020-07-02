@@ -11,6 +11,8 @@ import JPY from './img/JPY.png'
 import RUB from './img/RUB.png'
 import USD from './img/USD.png'
 import {RateContext} from "./context/RateContext";
+import {Dark} from "./components/dark/Dark";
+import {Modal} from "./components/modal/Modal";
 
 class App extends React.Component
 {
@@ -192,6 +194,8 @@ class App extends React.Component
                     dataWrite: this.dataWrite,
                     sampleRemove: this.sampleRemove,
                 }}>
+                <Dark />
+                <Modal />
                 <Layout />
             </RateContext.Provider>
         )
