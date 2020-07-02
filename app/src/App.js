@@ -125,6 +125,11 @@ class App extends React.Component
                     currency
                 })
             })
+
+        axios.get('https://example-react-app.firebaseio.com/sample.json')
+            .then((response) => {
+                this.setState({sampleList: response.data})
+            })
     }
 
     baseHandler = (event) => {
@@ -165,6 +170,14 @@ class App extends React.Component
             })
     }
 
+    sampleRemove = async (id) => {
+        let sampleList = {...this.state.sampleList}
+        delete sampleList[id]
+        this.setState({sampleList})
+
+        await axios.delete(`https://example-react-app.firebaseio.com/sample/${id}.json`)
+    }
+
     render(){
         return(
             <RateContext.Provider
@@ -176,7 +189,8 @@ class App extends React.Component
                     baseHandler: this.baseHandler,
                     base2Handler: this.base2Handler,
                     sampleDateHandler: this.sampleDateHandler,
-                    dataWrite: this.dataWrite
+                    dataWrite: this.dataWrite,
+                    sampleRemove: this.sampleRemove,
                 }}>
                 <Layout />
             </RateContext.Provider>
