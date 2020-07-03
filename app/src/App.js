@@ -13,6 +13,7 @@ import USD from './img/USD.png'
 import {RateContext} from "./context/RateContext";
 import {Dark} from "./components/dark/Dark";
 import {Modal} from "./components/modal/Modal";
+import {Input} from "./components/input/Input";
 
 class App extends React.Component
 {
@@ -20,6 +21,34 @@ class App extends React.Component
     constructor(props){
         super(props);
         this.state = {
+
+            formControls: {
+                email: {
+                    value: '',
+                    type: 'email',
+                    label: 'Email',
+                    errorMessage: 'Введите корректный Email',
+                    valid: false,
+                    touched: false,
+                    validation: {
+                        required: true,
+                        email: true
+                    }
+                },
+                password: {
+                    value: '',
+                    type: 'password',
+                    label: 'Пароль',
+                    errorMessage: 'Пароль не может быть пустым',
+                    valid: false,
+                    touched: false,
+                    validation: {
+                        required: true,
+                        minLength: 6
+                    }
+                }
+            },
+
             base: 'USD',
             rate: '',
             date: '',
@@ -78,6 +107,29 @@ class App extends React.Component
             sampleList: ''
 
         }
+    }
+
+    onChangeHandler = (event, controlName) => {
+        console.log(`${controlName} - ${event.target.value}`)
+    }
+
+    renderInputs = () => {
+        return Object.keys(this.state.formControls).map((controlName, idx) => {
+            const control = this.state.formControls[controlName]
+            return (
+                <Input
+                    key={controlName + idx}
+                    type={control.type}
+                    value={control.value}
+                    valid={control.valid}
+                    tpuched={control.touched}
+                    label={control.label}
+                    errorMessage={control.errorMessage}
+                    shouldValidate={true}
+                    onChange={(event) => this.onChangeHandler(event, controlName)}
+                />
+            )
+        })
     }
 
     inputValueHandler = (event) => {
@@ -193,6 +245,7 @@ class App extends React.Component
                     sampleDateHandler: this.sampleDateHandler,
                     dataWrite: this.dataWrite,
                     sampleRemove: this.sampleRemove,
+                    renderInputs: this.renderInputs
                 }}>
                 <Dark />
                 <Modal />
