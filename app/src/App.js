@@ -104,9 +104,19 @@ class App extends React.Component
                 date: '',
                 course: ''
             },
-            sampleList: ''
+            sampleList: '',
+
+            showModal: false
 
         }
+    }
+
+    modalShowHandler = () => {
+        this.setState({showModal: true})
+    }
+
+    modalHideHandler = () => {
+        this.setState({showModal: false})
     }
 
     onChangeHandler = (event, controlName) => {
@@ -296,9 +306,11 @@ class App extends React.Component
                     sampleDateHandler: this.sampleDateHandler,
                     dataWrite: this.dataWrite,
                     sampleRemove: this.sampleRemove,
-                    renderInputs: this.renderInputs
+                    renderInputs: this.renderInputs,
+                    modalHideHandler: this.modalHideHandler,
+                    modalShowHandler: this.modalShowHandler,
                 }}>
-                <Dark />
+                <Dark showModal={this.state.showModal} modalHideHandler={this.modalHideHandler} />
                 <Modal />
                 <Layout />
             </RateContext.Provider>
