@@ -111,6 +111,57 @@ class App extends React.Component
 
     onChangeHandler = (event, controlName) => {
         console.log(`${controlName} - ${event.target.value}`)
+
+        const formControls = {...this.state.formControls}
+        const control = {...formControls[controlName]}
+
+
+
+        control.value = event.target.value
+        control.touched = true
+
+
+
+        control.valid = this.validateControl(control.value, control.validation)
+
+        console.log(control)
+
+        formControls[controlName] = control
+
+        this.setState({formControls})
+    }
+
+    validateControl = (value, validation) => {
+        if (!validation) {
+            return true
+        }
+
+        let isValid = true
+
+        if (validation.required) {
+            isValid = value.trim() !== '' && isValid
+        }
+
+        if (validation.email) {
+            isValid = this.validateEmail(value) && isValid
+        }
+
+        if (validation.minLength) {
+            isValid = value.length >= validation.minLength && isValid
+        }
+
+        return isValid
+
+    }
+
+    // validateEmail(email) {
+    //     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    //     return re.test(String(email).toLowerCase());
+    // }
+
+    validateEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
     }
 
     renderInputs = () => {
@@ -122,7 +173,7 @@ class App extends React.Component
                     type={control.type}
                     value={control.value}
                     valid={control.valid}
-                    tpuched={control.touched}
+                    touched={control.touched}
                     label={control.label}
                     errorMessage={control.errorMessage}
                     shouldValidate={true}
