@@ -7,7 +7,7 @@ import {RateContext} from "../../context/RateContext";
 
 export const Register = () =>{
 
-    const {renderInputs} = useContext(RateContext)
+    const {renderInputs, state, registerHandler} = useContext(RateContext)
 
     return(
         <Fragment>
@@ -16,7 +16,7 @@ export const Register = () =>{
             </div>
 
             <div className = 'modalBtn'>
-                <Button text = 'Зарегистрироваться'/>
+                <Button text = 'Зарегистрироваться' disabled={!state.isFormValid} click={registerHandler} />
             </div>
 
         </Fragment>

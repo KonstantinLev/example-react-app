@@ -46,6 +46,10 @@ export const Modal = () => {
                 <hr/>
             </Fragment>
 
+            <div style={{textAlign: 'center'}}>
+                <h3 style={{color: 'red'}}>{state.error}</h3>
+            </div>
+
             {value === 'register' ? <Register /> : <Login />}
 
         </div>

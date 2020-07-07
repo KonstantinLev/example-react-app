@@ -22,6 +22,8 @@ class App extends React.Component
         super(props);
         this.state = {
 
+            auth: false,
+            error: '',
             formControls: {
                 email: {
                     value: '',
@@ -106,7 +108,10 @@ class App extends React.Component
             },
             sampleList: '',
 
-            showModal: false
+            showModal: false,
+
+            //
+            isFormValid: false
 
         }
     }
@@ -120,25 +125,22 @@ class App extends React.Component
     }
 
     onChangeHandler = (event, controlName) => {
-        console.log(`${controlName} - ${event.target.value}`)
-
         const formControls = {...this.state.formControls}
         const control = {...formControls[controlName]}
 
-
-
         control.value = event.target.value
         control.touched = true
-
-
-
         control.valid = this.validateControl(control.value, control.validation)
-
-        console.log(control)
 
         formControls[controlName] = control
 
-        this.setState({formControls})
+        let isFormValid = true
+
+        Object.keys(formControls).forEach(name => {
+            isFormValid = formControls[name].valid && isFormValid
+        })
+
+        this.setState({formControls, isFormValid})
     }
 
     validateControl = (value, validation) => {
@@ -293,6 +295,60 @@ class App extends React.Component
         await axios.delete(`https://example-react-app.firebaseio.com/sample/${id}.json`)
     }
 
+    loginHandler = async () => {
+        const authData = {
+            email: this.state.formControls.email.value,
+            password: this.state.formControls.password.value,
+            returnSecureToken: true
+        }
+        try {
+            const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAegxOoFdb3rT0qjF1Mdg--1t35bBCXuyI', authData)
+            if (response.data.idToken) {
+
+                const formControls = {...this.state.formControls}
+                formControls.email.value = ''
+                formControls.password.value = ''
+
+                this.setState({
+                    auth: true,
+                    showModal: false,
+                    error: '',
+                    formControls
+                })
+            }
+        } catch(e) {
+            console.error(e)
+            this.setState({error: 'Ошибка'})
+        }
+    }
+
+    registerHandler = async () => {
+        const authData = {
+            email: this.state.formControls.email.value,
+            password: this.state.formControls.password.value,
+            returnSecureToken: true
+        }
+        try {
+            const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAegxOoFdb3rT0qjF1Mdg--1t35bBCXuyI', authData)
+            if (response.data.idToken) {
+
+                const formControls = {...this.state.formControls}
+                formControls.email.value = ''
+                formControls.password.value = ''
+
+                this.setState({
+                    auth: true,
+                    showModal: false,
+                    error: '',
+                    formControls
+                })
+            }
+        } catch(e) {
+            console.error(e)
+            this.setState({error: 'Ошибка'})
+        }
+    }
+
     render(){
         return(
             <RateContext.Provider
@@ -309,6 +365,8 @@ class App extends React.Component
                     renderInputs: this.renderInputs,
                     modalHideHandler: this.modalHideHandler,
                     modalShowHandler: this.modalShowHandler,
+                    loginHandler: this.loginHandler,
+                    registerHandler: this.registerHandler
                 }}>
                 <Dark showModal={this.state.showModal} modalHideHandler={this.modalHideHandler} />
                 <Modal />
